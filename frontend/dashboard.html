@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-gray-50">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - Office Parking System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="h-full font-sans antialiased text-gray-800">
+    <div id="app" class="min-h-full">
+      <!-- Navigation Bar -->
+      <nav class="bg-gray-800">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="flex h-16 items-center justify-between">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <svg
+                  class="h-8 w-8 text-indigo-400"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.125-.504 1.125-1.125V14.25m-1.25 4.5v-1.875a3.375 3.375 0 003.375-3.375h1.5a1.125 1.125 0 011.125 1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375m15.75 0v-1.5c0-.621-.504-1.125-1.125-1.125h-1.5a3.375 3.375 0 00-3.375 3.375V18.75m-17.25-9.75h14.25c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-14.25c-.621 0-1.125-.504-1.125-1.125v-4.5c0-.621.504-1.125 1.125-1.125z"
+                  />
+                </svg>
+              </div>
+              <div class="ml-4">
+                <h1 class="text-xl font-bold text-white">
+                  Office Parking System
+                </h1>
+              </div>
+            </div>
+            <div class="flex items-center space-x-4">
+              <a
+                id="admin-link"
+                href="admin.html"
+                class="hidden text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+              >
+                Admin
+              </a>
+              <a
+                href="profile.html"
+                class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+              >
+                Profile
+              </a>
+              <button
+                id="logout-btn"
+                class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Main Content Area -->
+      <main class="py-10">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Search Section -->
+            <div class="bg-white p-6 shadow rounded-lg">
+              <h3 class="text-lg font-medium leading-6 text-gray-900">
+                Find Vehicle Owner
+              </h3>
+              <form id="search-form" class="mt-4">
+                <div class="flex rounded-md shadow-sm">
+                  <input
+                    type="text"
+                    id="search-reg"
+                    name="search-reg"
+                    required
+                    class="block w-full min-w-0 flex-1 rounded-none rounded-l-md border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    placeholder="Enter Registration Number"
+                  />
+                  <button
+                    type="submit"
+                    class="inline-flex items-center rounded-r-md border border-l-0 border-gray-300 bg-gray-50 px-4 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                  >
+                    Search
+                  </button>
+                </div>
+              </form>
+              <div id="search-result-container" class="mt-4"></div>
+            </div>
+
+            <!-- My Vehicles Section -->
+            <div class="bg-white p-6 shadow rounded-lg">
+              <h3 class="text-lg font-medium leading-6 text-gray-900">
+                My Vehicles
+              </h3>
+              <div id="my-vehicles-list" class="mt-4 flow-root">
+                <!-- Vehicle list will be rendered here -->
+              </div>
+              <hr class="my-6" />
+              <h3 class="text-lg font-medium leading-6 text-gray-900">
+                Add a New Vehicle
+              </h3>
+              <form id="lookup-vehicle-form" class="mt-4">
+                <label
+                  for="add-reg"
+                  class="block text-sm font-medium text-gray-700"
+                  >Registration</label
+                >
+                <div class="mt-1 flex rounded-md shadow-sm">
+                  <input
+                    type="text"
+                    name="regNo"
+                    id="add-reg"
+                    required
+                    class="block w-full min-w-0 flex-1 rounded-none rounded-l-md border-gray-300 px-3 py-2 focus:border-indigo-500 sm:text-sm"
+                    placeholder="e.g., AB12 CDE"
+                  />
+                  <button
+                    type="submit"
+                    class="inline-flex items-center rounded-r-md border border-l-0 border-gray-300 bg-gray-50 px-4 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                  >
+                    Check
+                  </button>
+                </div>
+              </form>
+              <div id="add-vehicle-container" class="mt-4"></div>
+
+              <div
+                id="add-vehicle-error"
+                class="mt-2 text-sm text-red-600"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // --- CONFIGURATION ---
+      const API_BASE_URL = "http://localhost:5188";
+
+      // --- DOM ELEMENTS ---
+      const logoutBtn = document.getElementById("logout-btn");
+      const searchForm = document.getElementById("search-form");
+      const lookupVehicleForm = document.getElementById("lookup-vehicle-form");
+      const myVehiclesList = document.getElementById("my-vehicles-list");
+      const searchResultContainer = document.getElementById(
+        "search-result-container"
+      );
+      const addVehicleContainer = document.getElementById(
+        "add-vehicle-container"
+      );
+      const addVehicleError = document.getElementById("add-vehicle-error");
+
+      // --- API HELPERS ---
+      async function apiCall(endpoint, method = "GET", body = null) {
+        const options = {
+          method,
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        };
+        if (body) options.body = JSON.stringify(body);
+
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({
+            message: `HTTP error! status: ${response.status}`,
+          }));
+          throw new Error(
+            errorData.message || `HTTP error! status: ${response.status}`
+          );
+        }
+        if (response.status === 204) return null; // No Content
+        return response.json();
+      }
+
+      // --- RENDERING ---
+      function renderVehicles(vehicles) {
+        if (vehicles.length === 0) {
+          myVehiclesList.innerHTML = `<p class="text-center text-sm text-gray-500">You haven't added any vehicles yet.</p>`;
+          return;
+        }
+        myVehiclesList.innerHTML = `
+                <ul role="list" class="-my-5 divide-y divide-gray-200">
+                    ${vehicles
+                      .map(
+                        (v) => `
+                        <li class="py-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900 truncate">${v.make} ${v.model} (${v.year})</p>
+                                    <p class="text-sm text-gray-500 truncate">${v.regNo} - ${v.colour}</p>
+                                </div>
+                                <div>
+                                    <button data-vehicle-id="${v.vehicleId}" class="delete-vehicle-btn inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50">
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </li>
+                    `
+                      )
+                      .join("")}
+                </ul>
+            `;
+        document.querySelectorAll(".delete-vehicle-btn").forEach((btn) => {
+          btn.addEventListener("click", handleDeleteVehicle);
+        });
+      }
+
+      function renderSearchResult(data) {
+        searchResultContainer.innerHTML = `<div class="rounded-md bg-green-50 p-4"><div class="ml-3"><h3 class="text-sm font-medium text-green-800">Owner Found</h3><div class="mt-2 text-sm text-green-700"><p><strong>Name:</strong> ${data.firstName} ${data.lastName}</p><p><strong>Phone:</strong> ${data.phoneNo}</p></div></div></div>`;
+      }
+
+      function renderError(container, message) {
+        container.innerHTML = `<div class="rounded-md bg-red-50 p-4"><div class="ml-3"><h3 class="text-sm font-medium text-red-800">Error</h3><p class="mt-2 text-sm text-red-700">${message}</p></div></div>`;
+      }
+
+      // --- EVENT HANDLERS ---
+      async function handleLogout() {
+        try {
+          await apiCall("/api/Auth/logout", "POST");
+        } finally {
+          window.location.href = "login.html";
+        }
+      }
+
+      async function handleSearch(event) {
+        event.preventDefault();
+        const regNo = document.getElementById("search-reg").value;
+        searchResultContainer.innerHTML = "";
+        try {
+          const data = await apiCall(`/api/Vehicle/search/${regNo}`);
+          renderSearchResult(data);
+        } catch (error) {
+          renderError(
+            searchResultContainer,
+            `Vehicle with registration '${regNo}' not found.`
+          );
+        }
+      }
+
+      // Handler for DVLA lookup
+      async function handleLookupVehicle(event) {
+        event.preventDefault();
+        const regNo = document.getElementById("add-reg").value;
+        addVehicleContainer.innerHTML = "";
+        addVehicleError.textContent = "";
+
+        let vehicleDataForConfirmation = null;
+
+        try {
+          const data = await apiCall(`/api/Vehicle/dvla/${regNo}`);
+          vehicleDataForConfirmation = {
+            regNo: regNo,
+            make: data.make,
+            model: data.model,
+            year: data.year,
+            colour: data.colour,
+          };
+
+          addVehicleContainer.innerHTML = `
+            <div class="rounded-md bg-blue-50 p-4">
+              <h4 class="text-sm font-medium text-blue-800">Is this your vehicle?</h4>
+              <div class="mt-2 text-sm text-blue-700 space-y-1">
+                <p><strong>Make:</strong> ${data.make}</p>
+                <p><strong>Model:</strong> ${data.model}</p>
+                <p><strong>Colour:</strong> ${data.colour}</p>
+                <p><strong>Year:</strong> ${data.year}</p>
+              </div>
+              <button id="confirm-add-btn" class="mt-4 w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700">
+                Confirm and Add Vehicle
+              </button>
+            </div>
+          `;
+
+          document
+            .getElementById("confirm-add-btn")
+            .addEventListener("click", () => {
+              handleAddVehicle(vehicleDataForConfirmation);
+            });
+        } catch (error) {
+          addVehicleError.textContent =
+            error.message || "Could not find vehicle in DVLA records.";
+        }
+      }
+
+      // Handler for adding the vehicle after confirmation
+      async function handleAddVehicle(vehicleToAdd) {
+        if (!vehicleToAdd) {
+          addVehicleError.textContent =
+            "Vehicle data is missing. Please try the lookup again.";
+          return;
+        }
+
+        addVehicleError.textContent = "";
+        try {
+          await apiCall("/api/Vehicle", "POST", vehicleToAdd);
+          lookupVehicleForm.reset();
+          addVehicleContainer.innerHTML = "";
+          await fetchUserVehicles();
+        } catch (error) {
+          addVehicleError.textContent =
+            error.message ||
+            "Failed to add vehicle. It may already be registered.";
+        }
+      }
+
+      async function handleDeleteVehicle(event) {
+        const vehicleId = event.target.dataset.vehicleId;
+        if (confirm("Are you sure you want to delete this vehicle?")) {
+          try {
+            await apiCall(`/api/Vehicle/${vehicleId}`, "DELETE");
+            await fetchUserVehicles();
+          } catch (error) {
+            alert("Failed to delete vehicle.");
+          }
+        }
+      }
+
+      async function showAdminLinkIfAdmin() {
+        try {
+          const user = await apiCall("/api/Account/role", "GET");
+          if (user.role === "System Admin") {
+            document.getElementById("admin-link").classList.remove("hidden");
+          }
+        } catch (error) {
+          console.error("Failed to fetch user info", error);
+        }
+      }
+
+      // --- INITIALIZATION ---
+      async function fetchUserVehicles() {
+        try {
+          const vehicles = await apiCall("/api/Vehicle");
+          renderVehicles(vehicles);
+        } catch (error) {
+          console.error("Could not fetch vehicles.", error);
+          myVehiclesList.innerHTML = `<p class="text-center text-sm text-red-500">Error fetching vehicles. You may need to log in again.</p>`;
+        }
+      }
+
+      function initializeApp() {
+        // Attach event listeners
+        logoutBtn.addEventListener("click", handleLogout);
+        searchForm.addEventListener("submit", handleSearch);
+        lookupVehicleForm.addEventListener("submit", handleLookupVehicle);
+
+        fetchUserVehicles();
+        showAdminLinkIfAdmin();
+      }
+
+      document.addEventListener("DOMContentLoaded", initializeApp);
+    </script>
+  </body>
+</html>
