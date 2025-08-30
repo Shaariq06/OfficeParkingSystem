@@ -243,7 +243,7 @@
         }
       }
 
-      // Handler for DVLA lookup
+      // Handler for DVSA lookup
       async function handleLookupVehicle(event) {
         event.preventDefault();
         const regNo = document.getElementById("add-reg").value;
@@ -253,13 +253,14 @@
         let vehicleDataForConfirmation = null;
 
         try {
-          const data = await apiCall(`/api/Vehicle/dvla/${regNo}`);
+          const data = await apiCall(`/api/Vehicle/dvsa/${regNo}`);
+          console.log("DVSA Data:", data);
           vehicleDataForConfirmation = {
             regNo: regNo,
             make: data.make,
             model: data.model,
             year: data.year,
-            colour: data.colour,
+            colour: data.primaryColour,
           };
 
           addVehicleContainer.innerHTML = `
@@ -268,7 +269,7 @@
               <div class="mt-2 text-sm text-blue-700 space-y-1">
                 <p><strong>Make:</strong> ${data.make}</p>
                 <p><strong>Model:</strong> ${data.model}</p>
-                <p><strong>Colour:</strong> ${data.colour}</p>
+                <p><strong>Colour:</strong> ${data.primaryColour}</p>
                 <p><strong>Year:</strong> ${data.year}</p>
               </div>
               <button id="confirm-add-btn" class="mt-4 w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700">
@@ -284,7 +285,7 @@
             });
         } catch (error) {
           addVehicleError.textContent =
-            error.message || "Could not find vehicle in DVLA records.";
+            error.message || "Could not find vehicle in DVSA records.";
         }
       }
 

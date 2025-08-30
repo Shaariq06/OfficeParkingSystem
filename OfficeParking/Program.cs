@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OfficeParkingSystem.Data;
 using OfficeParkingSystem.Models.Domain;
+using OfficeParkingSystem.Models.DTO;
 using OfficeParkingSystem.Repositories;
 using OfficeParkingSystem.Services;
 
@@ -47,7 +48,11 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
-builder.Services.AddHttpClient<IDvlaService, DvlaService>();
+builder.Services.Configure<DvsaApiSettings>(
+    builder.Configuration.GetSection("DvsaApiSettings"));
+
+builder.Services.AddHttpClient<IDvsaService, DvsaService>();
+
 
 
 var app = builder.Build();

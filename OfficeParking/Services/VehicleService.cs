@@ -7,12 +7,10 @@ namespace OfficeParkingSystem.Services
     public class VehicleService : IVehicleService
     {
         private readonly IVehicleRepository _vehicleRepository;
-        private readonly IDvlaService _dvlaService;
 
-        public VehicleService(IVehicleRepository vehicleRepository, IDvlaService dvlaService)
+        public VehicleService(IVehicleRepository vehicleRepository)
         {
             _vehicleRepository = vehicleRepository;
-            _dvlaService = dvlaService;
         }
 
         public async Task<Vehicle> AddVehicleAsync(string userId, AddVehicleRequestDTO dto)
@@ -27,7 +25,7 @@ namespace OfficeParkingSystem.Services
             {
                 RegNo = dto.RegNo.ToUpper().Replace(" ", string.Empty),
                 Make = dto.Make,
-                Model = "Golf",
+                Model = dto.Model,
                 Year = dto.Year,
                 Colour = dto.Colour,
                 UserId = userId,

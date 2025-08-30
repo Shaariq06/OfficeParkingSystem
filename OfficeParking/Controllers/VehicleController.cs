@@ -12,12 +12,12 @@ namespace OfficeParkingSystem.Controllers
     public class VehicleController : ControllerBase
     {
         private readonly IVehicleService _vehicleService;
-        private readonly IDvlaService _dvlaService;
+        private readonly IDvsaService _dvsaService;
 
-        public VehicleController(IVehicleService vehicleService, IDvlaService dvlaService)
+        public VehicleController(IVehicleService vehicleService, IDvsaService dvsaService)
         {
             _vehicleService = vehicleService;
-            _dvlaService = dvlaService;
+            _dvsaService = dvsaService;
         }
 
         // GET: api/vehicle
@@ -34,20 +34,21 @@ namespace OfficeParkingSystem.Controllers
             return Ok(vehicles);
         }
 
-        // GET: api/vehicle/dvla/{regNo}
-        [HttpGet("dvla/{regNo}")]
-        public async Task<IActionResult> GetDvlaDetails(string regNo)
+        // GET: api/vehicle/dvsa/{regNo}
+        [HttpGet("dvsa/{regNo}")]
+        public async Task<IActionResult> GetDvsaDetails(string regNo)
         {
             if (string.IsNullOrWhiteSpace(regNo))
             {
                 return BadRequest("Registration number cannot be empty.");
             }
 
-            var vehicleDetails = await _dvlaService.GetVehicleDetailsAsync(regNo);
+            var vehicleDetails = await _dvsaService.GetVehicleDetailsAsync(regNo);
+            Console.WriteLine(vehicleDetails);
 
             if (vehicleDetails == null)
             {
-                return NotFound(new { message = $"Vehicle with registration '{regNo}' not found in DVLA records." });
+                return NotFound(new { message = $"Vehicle with registration '{regNo}' not found in DVSA records." });
             }
 
             return Ok(vehicleDetails);
