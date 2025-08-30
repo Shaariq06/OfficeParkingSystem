@@ -253,6 +253,16 @@
         let vehicleDataForConfirmation = null;
 
         try {
+          addVehicleContainer.innerHTML = `
+            <div class="rounded-md bg-blue-50 p-4">
+              <div class="flex items-center space-x-2">
+                <svg class="animate-spin h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                </svg>
+                <p class="text-sm font-medium text-blue-800">Looking up vehicle details...</p>
+            </div>
+          `;
           const data = await apiCall(`/api/Vehicle/dvsa/${regNo}`);
           console.log("DVSA Data:", data);
           vehicleDataForConfirmation = {
@@ -286,6 +296,10 @@
         } catch (error) {
           addVehicleError.textContent =
             error.message || "Could not find vehicle in DVSA records.";
+        } finally {
+          if (!vehicleDataForConfirmation) {
+            addVehicleContainer.innerHTML = "";
+          }
         }
       }
 
