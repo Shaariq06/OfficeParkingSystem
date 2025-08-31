@@ -1,5 +1,7 @@
-Office Parking Management System
+**Office Parking Management System**
+
 Overview
+
 The Office Parking Management System is a modern web application designed to solve the common office problem of identifying and contacting vehicle owners in a shared car park. It replaces outdated paper-based systems with a secure, real-time, and self-service digital solution. The application features an interactive parking map, allowing employees to see available spots and mark their own, providing a complete and live overview of the car park's status.
 
 This project was developed as part of the Work-Based Learning module (IMAT1405).
