@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OfficeParkingSystem.Data;
 
@@ -10,9 +11,11 @@ using OfficeParkingSystem.Data;
 namespace OfficeParking.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250831112044_AddParkingSpotsTable")]
+    partial class AddParkingSpotsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -157,12 +160,6 @@ namespace OfficeParking.Migrations
                     b.Property<string>("OccupiedByUserId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("OccupiedByVehicleId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("OccupiedByVehicleVehicleId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("SpotNumber")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -170,8 +167,6 @@ namespace OfficeParking.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OccupiedByUserId");
-
-                    b.HasIndex("OccupiedByVehicleVehicleId");
 
                     b.ToTable("ParkingSpots");
                 });
@@ -351,13 +346,7 @@ namespace OfficeParking.Migrations
                         .WithMany()
                         .HasForeignKey("OccupiedByUserId");
 
-                    b.HasOne("OfficeParkingSystem.Models.Domain.Vehicle", "OccupiedByVehicle")
-                        .WithMany()
-                        .HasForeignKey("OccupiedByVehicleVehicleId");
-
                     b.Navigation("OccupiedByUser");
-
-                    b.Navigation("OccupiedByVehicle");
                 });
 
             modelBuilder.Entity("OfficeParkingSystem.Models.Domain.Vehicle", b =>

@@ -132,6 +132,35 @@
                 class="mt-2 text-sm text-red-600"
               ></div>
             </div>
+            <div
+              class="bg-white p-6 shadow rounded-lg col-span-1 md:col-span-2"
+            >
+              <h3 class="text-lg font-medium leading-6 text-gray-900">
+                Parking Availability
+              </h3>
+              <div id="parking-map" class="mt-4 grid grid-cols-5 gap-2"></div>
+            </div>
+            <div id="vehicle-modal" class="relative z-10 hidden">
+              <div
+                class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+              ></div>
+              <div class="fixed inset-0 z-10 overflow-y-auto">
+                <div
+                  class="flex min-h-full items-center justify-center p-4 text-center"
+                >
+                  <div
+                    class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl"
+                  >
+                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6">
+                      <h3 class="text-lg font-medium leading-6 text-gray-900">
+                        Which car are you parking?
+                      </h3>
+                      <div id="vehicle-list" class="mt-4 space-y-2"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </main>
@@ -153,6 +182,9 @@
         "add-vehicle-container"
       );
       const addVehicleError = document.getElementById("add-vehicle-error");
+      const vehicleList = document.getElementById("vehicle-list");
+      let userVehicles = [];
+      const vehicleModal = document.getElementById("vehicle-modal");
 
       // --- API HELPERS ---
       async function apiCall(endpoint, method = "GET", body = null) {
@@ -351,10 +383,92 @@
       async function fetchUserVehicles() {
         try {
           const vehicles = await apiCall("/api/Vehicle");
+          userVehicles = vehicles;
           renderVehicles(vehicles);
         } catch (error) {
           console.error("Could not fetch vehicles.", error);
           myVehiclesList.innerHTML = `<p class="text-center text-sm text-red-500">Error fetching vehicles. You may need to log in again.</p>`;
+        }
+      }
+
+      const parkingMap = document.getElementById("parking-map");
+
+      async function fetchAndRenderParkingSpots() {
+        try {
+          const spots = await apiCall("/api/parking/spots");
+          parkingMap.innerHTML = "";
+          spots.forEach((spot) => {
+            const spotElement = document.createElement("div");
+            spotElement.classList.add(
+              "p-4",
+              "text-center",
+              "rounded-md",
+              "cursor-pointer"
+            );
+            spotElement.textContent = spot.spotNumber;
+            spotElement.dataset.spotId = spot.id;
+
+            if (spot.isOccupied) {
+              spotElement.classList.add("bg-red-500", "text-white");
+            } else {
+              spotElement.classList.add("bg-green-500", "text-white");
+            }
+
+            spotElement.addEventListener("click", handleSpotClick);
+            parkingMap.appendChild(spotElement);
+          });
+        } catch (error) {
+          console.error("Failed to fetch parking spots", error);
+          parkingMap.innerHTML = "<p>Could not load parking map.</p>";
+        }
+      }
+
+      async function handleSpotClick(event) {
+        const spotId = event.target.dataset.spotId;
+
+        const isVacating = event.target.classList.contains("bg-red-500");
+        if (isVacating) {
+          occupySpot(spotId, null);
+          return;
+        }
+
+        if (userVehicles.length === 0) {
+          alert("You must register a vehicle before you can occupy a spot.");
+          return;
+        }
+
+        if (userVehicles.length === 1) {
+          occupySpot(spotId, userVehicles[0].vehicleId);
+        } else {
+          vehicleList.innerHTML = userVehicles
+            .map(
+              (v) =>
+                `<button data-vehicle-id="${v.vehicleId}" data-spot-id="${spotId}" class="vehicle-select-btn w-full text-left p-2 rounded-md hover:bg-gray-100">${v.make} ${v.model} (${v.regNo})</button>`
+            )
+            .join("");
+          vehicleModal.classList.remove("hidden");
+
+          document.querySelectorAll(".vehicle-select-btn").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const vehicleId = e.target.dataset.vehicleId;
+              occupySpot(spotId, vehicleId);
+              vehicleModal.classList.add("hidden");
+            });
+          });
+        }
+      }
+
+      async function occupySpot(spotId, vehicleId) {
+        try {
+          const result = await apiCall(
+            `/api/parking/spots/${spotId}/toggle`,
+            "POST",
+            { vehicleId }
+          );
+          alert(result.message);
+          fetchAndRenderParkingSpots();
+        } catch (error) {
+          alert(error.message);
         }
       }
 
@@ -366,6 +480,7 @@
 
         fetchUserVehicles();
         showAdminLinkIfAdmin();
+        fetchAndRenderParkingSpots();
       }
 
       document.addEventListener("DOMContentLoaded", initializeApp);

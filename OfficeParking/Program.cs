@@ -43,6 +43,7 @@ builder.Services.AddIdentity<User, IdentityRole>()
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
+builder.Services.AddScoped<IParkingSpotRepository, ParkingSpotRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
@@ -50,10 +51,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.Configure<DvsaApiSettings>(
     builder.Configuration.GetSection("DvsaApiSettings"));
-
 builder.Services.AddHttpClient<IDvsaService, DvsaService>();
-
-
+builder.Services.AddScoped<IParkingService, ParkingService>();
 
 var app = builder.Build();
 
@@ -80,6 +79,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         await DbSeeder.SeedRolesAndAdminAsync(services);
+        await DbSeeder.SeedParkingSpotsAsync(services);
     }
     catch (Exception ex)
     {

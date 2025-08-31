@@ -11,5 +11,6 @@ namespace OfficeParkingSystem.Data
         {
         }
         public DbSet<Vehicle> Vehicles { get; set; }
+        public DbSet<ParkingSpot> ParkingSpots { get; set; }
     }
 }

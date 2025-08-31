@@ -43,5 +43,21 @@ namespace OfficeParkingSystem.Data
                 }
             }
         }
+
+        public static async Task SeedParkingSpotsAsync(IServiceProvider serviceProvider)
+        {
+            var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
+            if (!context.ParkingSpots.Any())
+            {
+                var spots = new List<ParkingSpot>();
+                for (int i = 1; i <= 22; i++)
+                {
+                    spots.Add(new ParkingSpot { SpotNumber = $"A{i}" });
+                }
+
+                await context.ParkingSpots.AddRangeAsync(spots);
+                await context.SaveChangesAsync();
+            }
+        }
     }
 }
